@@ -1,336 +1,485 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Explosion | Step Into Clean Energy</title>
+    <title>Explosion | Smart Kinetic Energy Tiles</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0b0f19;
-            --text-main: #ffffff;
-            --neon-green: #00ff88;
-            --neon-blue: #00b8ff;
-            --tile-bg: #1a2235;
+            --bg-base: #030712;
+            --panel-bg: rgba(17, 24, 39, 0.7);
+            --neon-primary: #00ff88;
+            --neon-secondary: #00e5ff;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --grid-color: rgba(0, 255, 136, 0.1);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            background-color: var(--bg-color);
+            background-color: var(--bg-base);
             color: var(--text-main);
+            font-family: 'Rajdhani', sans-serif;
             overflow-x: hidden;
+            background-image: 
+                linear-gradient(var(--grid-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+            background-size: 50px 50px;
+            background-position: center center;
+            position: relative;
         }
 
-        /* --- Animations --- */
-        @keyframes glow {
-            0% {
-                box-shadow: 0 0 5px var(--neon-green);
-            }
-
-            50% {
-                box-shadow: 0 0 20px var(--neon-green), 0 0 30px var(--neon-blue);
-            }
-
-            100% {
-                box-shadow: 0 0 5px var(--neon-green);
-            }
+        /* Ambient background glow */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80vw;
+            height: 80vh;
+            background: radial-gradient(circle, rgba(0,255,136,0.05) 0%, rgba(0,0,0,0) 70%);
+            z-index: -1;
+            pointer-events: none;
         }
 
-        @keyframes float {
-            0% {
-                transform: translateY(0px);
-            }
-
-            50% {
-                transform: translateY(-10px);
-            }
-
-            100% {
-                transform: translateY(0px);
-            }
+        h1, h2, h3, .logo, .data-value {
+            font-family: 'Orbitron', sans-serif;
         }
 
-        @keyframes tilePress {
-            0% {
-                transform: scale(1);
-                background-color: var(--tile-bg);
-                box-shadow: none;
-            }
-
-            50% {
-                transform: scale(0.95);
-                background-color: var(--neon-green);
-                box-shadow: 0 0 25px var(--neon-green);
-            }
-
-            100% {
-                transform: scale(1);
-                background-color: var(--tile-bg);
-                box-shadow: 0 0 10px rgba(0, 255, 136, 0.2);
-            }
-        }
-
-        /* --- Header & Hero --- */
-        header {
-            padding: 2rem 5%;
+        /* --- Navigation --- */
+        nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.5rem 5%;
+            background: rgba(3, 7, 18, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 255, 136, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
         .logo {
-            font-size: 2rem;
-            font-weight: 800;
+            font-size: 1.8rem;
+            font-weight: 900;
             letter-spacing: 2px;
-            color: var(--text-main);
-            text-transform: uppercase;
+            color: white;
+            text-shadow: 0 0 10px var(--neon-primary);
         }
 
-        .logo span {
-            color: var(--neon-green);
-            text-shadow: 0 0 10px var(--neon-green);
+        .logo span { color: var(--neon-primary); }
+
+        .univ-tag {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            border: 1px solid var(--text-muted);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            letter-spacing: 1px;
         }
 
+        /* --- Hero Section --- */
         .hero {
+            min-height: 80vh;
             display: flex;
             flex-direction: column;
+            justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 4rem 2rem;
+            padding: 2rem 5%;
+            position: relative;
         }
 
         .hero h1 {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
+            font-size: 4.5rem;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, var(--neon-primary), var(--neon-secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: float 4s ease-in-out infinite;
+            text-transform: uppercase;
         }
 
         .hero p {
-            font-size: 1.2rem;
-            color: #a0aec0;
-            max-width: 600px;
+            font-size: 1.4rem;
+            max-width: 800px;
+            color: var(--text-muted);
             margin-bottom: 2rem;
-            line-height: 1.6;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid var(--neon-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            font-weight: 600;
+            color: var(--neon-primary);
+            margin-bottom: 2rem;
+            animation: pulse-border 2s infinite;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background-color: var(--neon-primary);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--neon-primary);
+            animation: blink 1.5s infinite;
         }
 
         /* --- Interactive Dashboard Section --- */
-        .dashboard-container {
+        .interactive-container {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 3rem;
-            padding: 2rem;
-            max-width: 1200px;
+            align-items: center;
+            gap: 4rem;
+            padding: 4rem 5%;
+            max-width: 1400px;
             margin: 0 auto;
         }
 
-        .stats-panel {
-            background: rgba(26, 34, 53, 0.8);
-            border: 1px solid rgba(0, 255, 136, 0.3);
-            border-radius: 15px;
-            padding: 2rem;
-            min-width: 300px;
-            text-align: center;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(10px);
+        /* 3D Isometric Grid */
+        .isometric-wrapper {
+            perspective: 1500px;
         }
 
-        .stats-panel h2 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: #a0aec0;
-        }
-
-        .power-readout {
-            font-size: 4.5rem;
-            font-weight: bold;
-            color: var(--neon-green);
-            text-shadow: 0 0 15px var(--neon-green);
-            margin: 1rem 0;
-            transition: all 0.2s ease;
-        }
-
-        .unit {
-            font-size: 1.5rem;
-            color: white;
-            text-shadow: none;
-        }
-
-        /* --- Interactive Tiles --- */
-        .interactive-floor {
+        .floor-grid {
             display: grid;
-            grid-template-columns: repeat(3, 100px);
-            grid-template-rows: repeat(3, 100px);
-            gap: 10px;
-            perspective: 1000px;
-            transform: rotateX(20deg);
+            grid-template-columns: repeat(4, 120px);
+            grid-template-rows: repeat(4, 120px);
+            gap: 5px;
+            transform: rotateX(60deg) rotateZ(-45deg);
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+
+        .floor-grid:hover {
+            transform: rotateX(55deg) rotateZ(-40deg);
         }
 
         .tile {
-            background-color: var(--tile-bg);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: transform 0.1s, background-color 0.3s;
+            background: rgba(17, 24, 39, 0.8);
+            border: 2px solid rgba(0, 255, 136, 0.3);
+            border-radius: 4px;
             position: relative;
-            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.8), 0 5px 15px rgba(0,0,0,0.5);
         }
 
         .tile::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, transparent, rgba(0, 255, 136, 0.1), transparent);
-            transform: translateX(-100%);
-            transition: 0.5s;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle, rgba(0,255,136,0.4) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.2s;
         }
 
-        .tile:hover::before {
-            transform: translateX(100%);
+        .tile:hover {
+            border-color: var(--neon-primary);
+            transform: translateZ(5px);
+            background: rgba(0, 255, 136, 0.1);
         }
 
-        .tile.stepped {
-            animation: tilePress 0.6s ease-out forwards;
+        .tile.active {
+            transform: translateZ(-5px);
+            background: var(--neon-primary);
+            box-shadow: 0 0 30px var(--neon-primary), inset 0 0 20px #fff;
         }
 
-        /* --- Info Section --- */
-        .info-section {
+        .tile.active::before { opacity: 1; }
+
+        /* Dashboard UI */
+        .dashboard-ui {
+            background: var(--panel-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 229, 255, 0.2);
+            border-radius: 16px;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-ui::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 3px;
+            background: linear-gradient(90deg, var(--neon-primary), var(--neon-secondary));
+        }
+
+        .dash-header {
+            font-size: 1.2rem;
+            color: var(--neon-secondary);
+            margin-bottom: 2rem;
             display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            padding: 4rem 2rem;
-            background: #111827;
-            border-top: 1px solid #1f2937;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .data-group { margin-bottom: 1.5rem; }
+        
+        .data-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .data-value {
+            font-size: 3.5rem;
+            color: white;
+            text-shadow: 0 0 15px var(--neon-primary);
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .data-unit {
+            font-size: 1.2rem;
+            color: var(--neon-primary);
+            text-shadow: none;
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+        .secondary-metrics {
+            display: flex;
+            justify-content: space-between;
             margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
         }
 
-        .info-card {
-            max-width: 300px;
+        .metric-sm .val {
+            font-size: 1.8rem;
+            font-family: 'Orbitron', sans-serif;
+            color: white;
+        }
+
+        /* --- Info Cards (The "Understandable" Context) --- */
+        .context-section {
+            padding: 4rem 5%;
+            background: linear-gradient(180deg, transparent, rgba(17, 24, 39, 0.8));
+        }
+
+        .section-title {
             text-align: center;
-            padding: 1.5rem;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: white;
         }
 
-        .info-card h3 {
-            color: var(--neon-blue);
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .glass-card {
+            background: var(--panel-bg);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--neon-secondary);
+        }
+
+        .glass-card h3 {
+            color: var(--neon-secondary);
+            font-size: 1.5rem;
             margin-bottom: 1rem;
-            font-size: 1.3rem;
         }
 
-        .info-card p {
-            color: #9ca3af;
-            line-height: 1.5;
+        .glass-card p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .highlight { color: var(--neon-primary); font-weight: bold; }
+
+        /* Animations */
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        @keyframes pulse-border {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(0, 255, 136, 0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 3rem; }
+            .floor-grid { grid-template-columns: repeat(3, 90px); grid-template-rows: repeat(3, 90px); }
+            .data-value { font-size: 2.5rem; }
         }
     </style>
 </head>
-
 <body>
 
-    <header>
-        <div class="logo">Explosion<span>.</span></div>
-    </header>
+    <nav>
+        <div class="logo">EXPLOSION<span>_</span></div>
+        <div class="univ-tag">UEM Kolkata | Action Area-III</div>
+    </nav>
 
     <section class="hero">
-        <h1>Step Into Clean Energy</h1>
-        <p>We create smart tiles that turn everyday footsteps into clean electricity for public spaces. Cutting costs,
-            reducing pollution, and boosting smart infrastructure efficiency.</p>
+        <div class="status-badge">
+            <div class="status-dot"></div> System Live
+        </div>
+        <h1>Step Into<br>Clean Energy</h1>
+        <p>Transforming wasted human kinetic energy into usable electricity. Designed for Urban Government Infrastructure to build the smart, sustainable cities of tomorrow.</p>
     </section>
 
-    <section class="dashboard-container">
-        <div class="stats-panel">
-            <h2>Real-Time Energy Harvesting</h2>
-            <div class="power-readout" id="powerDisplay">0<span class="unit"> Wh</span></div>
-            <p style="color: #a0aec0; margin-top: 10px;">Steps taken: <span id="stepCount"
-                    style="color: white; font-weight: bold;">0</span></p>
-            <p style="color: #a0aec0; font-size: 0.9rem; margin-top: 5px;">Target: Urban Government Infrastructure</p>
-        </div>
-
-        <div class="interactive-floor" id="tileGrid">
-        </div>
-    </section>
-
-    <section class="info-section">
-        <div class="info-card">
-            <h3>The Problem</h3>
-            <p>Rising electricity demand and wasted human kinetic energy cause higher costs and reliance on
-                non-renewable power sources.</p>
-        </div>
-        <div class="info-card">
-            <h3>Our Solution</h3>
-            <p>Piezoelectric or electromagnetic energy-harvesting tiles embedded with sensors for real-time monitoring.
+    <section class="interactive-container">
+        <!-- Interactive 3D Floor Grid -->
+        <div class="isometric-wrapper">
+            <div class="floor-grid" id="floorGrid">
+                <!-- Tiles generated by JS -->
+            </div>
+            <p style="text-align: center; margin-top: 3rem; color: var(--text-muted); font-size: 1.2rem;">
+                [ INTERACT: CLICK TILES TO SIMULATE FOOTSTEPS ]
             </p>
         </div>
-        <div class="info-card">
-            <h3>Unique Value</h3>
-            <p>Turns everyday human movement into clean power, tailored specifically for urban government
-                infrastructure.</p>
+
+        <!-- Real-time Dashboard UI -->
+        <div class="dashboard-ui">
+            <div class="dash-header">
+                <span>Energy Harvesting Node 01</span>
+                <span class="status-dot"></span>
+            </div>
+
+            <div class="data-group">
+                <div class="data-label">Total Energy Generated</div>
+                <div class="data-value" id="powerTotal">0.0 <span class="data-unit">Wh</span></div>
+            </div>
+
+            <div class="secondary-metrics">
+                <div class="metric-sm">
+                    <div class="data-label">Today's Steps</div>
+                    <div class="val" id="stepCount">0</div>
+                </div>
+                <div class="metric-sm">
+                    <div class="data-label">CO2 Saved</div>
+                    <div class="val" id="co2Saved">0.00 <span style="font-size: 1rem; color: var(--text-muted)">kg</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="context-section">
+        <h2 class="section-title">Venture Viability Analysis</h2>
+        <div class="cards-grid">
+            <div class="glass-card">
+                <h3>The 1,100 TWh Problem</h3>
+                <p>The 2024 forecasted demand for electricity is growing by 4.3% (<span class="highlight">~1,100 TWh</span>). Buildings currently consume ~30% of world energy. Rising demand causes pollution and reliance on non-renewable sources.</p>
+            </div>
+            <div class="glass-card">
+                <h3>The Smart Solution</h3>
+                <p>Our piezoelectric and electromagnetic tiles capture energy from crowds in public spaces. Every footstep generates up to <span class="highlight">37.5 Watts</span>, which is monitored via real-time microcontrollers.</p>
+            </div>
+            <div class="glass-card">
+                <h3>Target Infrastructure</h3>
+                <p>Designed primarily for <span class="highlight">Urban Government Authorities</span>. Perfect for high-footfall zones like metro stations, sidewalks, and malls, turning wasted kinetic movement into a clean resource.</p>
+            </div>
         </div>
     </section>
 
     <script>
-        // Setup Variables based on prototype data
-        let totalWatts = 0;
-        let totalSteps = 0;
-        const wattsPerStep = 37.5; // Referencing the 37.5 Watts prototype output
+        // Data Configuration (Based on your pitch deck)
+        const WATTS_PER_STEP = 37.5; // Power output per step
+        const WH_CONVERSION = WATTS_PER_STEP / 3600; // Rough conversion to Watt-hours for rapid display
+        const CO2_PER_WH = 0.0004; // Simulated CO2 offset factor
 
-        const powerDisplay = document.getElementById('powerDisplay');
-        const stepCount = document.getElementById('stepCount');
-        const tileGrid = document.getElementById('tileGrid');
+        // State Variables
+        let totalWh = 1050.0; // Starting baseline from deck (1055 Wh)
+        let totalSteps = 320; // Starting baseline from deck (325)
+        let totalCo2 = 20.45; // Starting baseline from deck (20.5 kg)
 
-        // Generate the 3x3 Grid of Tiles
-        for (let i = 0; i < 9; i++) {
+        // DOM Elements
+        const grid = document.getElementById('floorGrid');
+        const displayPower = document.getElementById('powerTotal');
+        const displaySteps = document.getElementById('stepCount');
+        const displayCo2 = document.getElementById('co2Saved');
+
+        // Initialize Display
+        function updateDashboard() {
+            displayPower.innerHTML = `${totalWh.toFixed(1)} <span class="data-unit">Wh</span>`;
+            displaySteps.innerText = totalSteps;
+            displayCo2.innerHTML = `${totalCo2.toFixed(2)} <span style="font-size: 1rem; color: var(--text-muted)">kg</span>`;
+        }
+        updateDashboard();
+
+        // Generate 4x4 Grid of Tiles
+        for (let i = 0; i < 16; i++) {
             const tile = document.createElement('div');
-            tile.classList.add('tile');
+            tile.className = 'tile';
+            
+            tile.addEventListener('click', () => {
+                if(tile.classList.contains('active')) return; // Prevent double trigger
 
-            // Add click event to simulate a footstep
-            tile.addEventListener('click', function () {
-                // Prevent spam clicking while animating
-                if (this.classList.contains('stepped')) return;
-
-                // 1. Trigger CSS Animation
-                this.classList.add('stepped');
-
-                // Remove the class after animation completes so it can be clicked again
+                // 1. Visual Effect on Tile
+                tile.classList.add('active');
+                
+                // Add a shockwave sound or visual pulse here if desired
+                
                 setTimeout(() => {
-                    this.classList.remove('stepped');
-                }, 600);
+                    tile.classList.remove('active');
+                }, 300); // Tile release speed
 
-                // 2. Update Logic
+                // 2. Update Data Logic
                 totalSteps++;
-                totalWatts += wattsPerStep;
+                totalWh += WH_CONVERSION * 100; // Multiplied for visual satisfaction in demo
+                totalCo2 += (WH_CONVERSION * 100 * CO2_PER_WH);
 
-                // 3. Update DOM Dashboard
-                stepCount.innerText = totalSteps;
-                // Add a cool scaling effect to the text when updated
-                powerDisplay.style.transform = "scale(1.1)";
-                powerDisplay.style.textShadow = "0 0 30px #00ff88";
-
-                // Format the number to keep it clean
-                powerDisplay.innerHTML = totalWatts.toFixed(1) + '<span class="unit"> Wh</span>';
-
-                // Reset the text scale back to normal
+                // 3. Update Dashboard with Glitch/Flash effect
+                updateDashboard();
+                
+                displayPower.style.color = "#ffffff";
+                displayPower.style.textShadow = "0 0 30px #00e5ff, 0 0 50px #00ff88";
+                displayPower.style.transform = "scale(1.05)";
+                
                 setTimeout(() => {
-                    powerDisplay.style.transform = "scale(1)";
-                    powerDisplay.style.textShadow = "0 0 15px #00ff88";
-                }, 200);
+                    displayPower.style.color = "white";
+                    displayPower.style.textShadow = "0 0 15px #00ff88";
+                    displayPower.style.transform = "scale(1)";
+                }, 150);
             });
 
-            tileGrid.appendChild(tile);
+            grid.appendChild(tile);
         }
+
+        // Auto-simulate steps every few seconds for a "live" feel
+        setInterval(() => {
+            const tiles = document.querySelectorAll('.tile');
+            const randomTile = tiles[Math.floor(Math.random() * tiles.length)];
+            randomTile.click();
+        }, 3500);
+
     </script>
-
 </body>
-
 </html>
